@@ -1,7 +1,6 @@
 
 ### 
 
-### **Likert Scale Rating : 1 — A is much better than B**
 
 ### **Final Verdict**
 

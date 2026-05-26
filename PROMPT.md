@@ -1,211 +1,212 @@
-# Prompt
+# Multi-Platform Social Media Analytics Dashboard — Full-Stack Build Prompt
 
-**Context and Role**
+## Role
 
-You're a Full-Stack Developer building something that actually matters — a Multi-Platform Social Media Analytics Dashboard that ties together YouTube, Instagram, TikTok, LinkedIn, and X/Twitter into one place. No more jumping between tabs. No more exporting CSVs from five different platforms.
-
-We built this workspace to stop you from constantly switching tabs. It brings your social media data into one clean page where growth patterns make sense and strategy is backed by real numbers. It's got secure account connections, clear pricing, and shared team workspaces where nobody accidentally breaks someone else's reports.
+You are a Full-Stack Developer. Build a production-ready, multi-platform Social Media Analytics Dashboard that unifies data from YouTube, Instagram, TikTok, LinkedIn, and X/Twitter into a single, cohesive interface. The product eliminates platform-switching, surfaces AI-driven insights, and ships with billing and team workspaces on day one.
 
 ---
 
-**Objective**
+## Objective
 
-Build a full-stack Social Media SaaS Dashboard that:
+Deliver a full-stack SaaS dashboard that:
 
-* Hooks into 5 platforms via OAuth and their official APIs  
-* Takes messy, inconsistent platform data and normalises it into one clean schema  
-* Runs AI models to forecast post performance and follower growth  
-* Renders a fast, responsive UI where data visualisations update in real time  
-* Ships with a working subscription and billing system from day one
-
----
-
-**UI and Animation Requirements**
-
-Every interaction should feel considered. Framer Motion handles the heavy lifting here:
-
-* Page transitions and micro-interactions that make the product feel polished, not bolted together  
-* Charts animate in on load. Metric cards stagger their appearance. Skeleton loaders cover the gap while data arrives  
-* When data refreshes, it updates inline — no full reloads, no flicker
-
-Include smooth transitions between:
-
-* Landing / Auth Page  
-* Onboarding Flow (platform connections)  
-* Main Dashboard Overview  
-* Per-Platform Deep Dive Pages  
-* Content Analyzer Page  
-* Settings and Billing Page
-
-Animations follow three rules:
-
-* No layout thrashing — ever  
-* Only GPU-friendly properties: `transform`, `opacity`  
-* Scale back automatically on weaker devices
+1. Connects to five social platforms via OAuth 2.0 and their official APIs
+2. Normalises platform-specific data into one shared schema
+3. Runs ML models to forecast post performance and follower growth
+4. Renders a fast, accessible, fully responsive UI with real-time data updates
+5. Operates a working subscription and billing system from launch
 
 ---
 
-**Layout Requirements**
+## UI & Animation
 
-The dashboard must include:
+Use **Framer Motion** throughout. Every interaction must feel intentional.
 
-* Header carrying a workspace switcher, notification bell, and avatar dropdown  
-* Sidebar that collapses cleanly without eating screen real estate  
-* Overview Page built around KPI cards — total reach, total followers, avg engagement rate, best-performing platform  
-* Growth Analytics Panel — multi-line chart, platform toggles, date-range picker  
-* Best Posting Times Heatmap — `hour × day-of-week`, colour intensity mapped to engagement  
-* Engagement Trends Panel — rolling 7, 30, and 90-day engagement rates with anomaly callouts  
-* Top Performing Content — cards ranked by engagement rate with thumbnail, platform badge, and AI-predicted score  
-* AI Recommendations Panel — specific, actionable output: when to post, what format to prioritise, which hashtags are working  
-* Competitor Benchmarking Panel (Pro tier) — real context against industry averages, not just internal numbers  
-* Settings Page — platform connections, notification toggles, billing details, team roster
+**Micro-interactions & transitions:**
+- Page-level transitions between all six views (Landing/Auth, Onboarding, Dashboard Overview, Per-Platform Deep Dive, Content Analyzer, Settings/Billing)
+- Charts animate on load; metric cards stagger their entrance; skeleton loaders cover data-fetch gaps
+- Data refreshes inline — no full-page reloads, no visible flicker
 
-The layout must:
-* Working on mobile, tablet, and desktop without compromise  
-* Fully access — ARIA labels, semantic markup, keyboard navigation throughout  
-* Load panels lazily so the initial render stays fast
+**Animation constraints (non-negotiable):**
+- No layout thrashing
+- Animate only GPU-friendly properties: `transform` and `opacity`
+- Automatically reduce motion on lower-capability devices
 
 ---
 
-**Platform Connection System**
+## Layout
 
-When someone clicks "Connect Platform" the experience needs to be seamless:
+### Global chrome
+- **Header:** workspace switcher, notification bell, avatar dropdown
+- **Sidebar:** collapsible, does not consume layout space when closed
 
-* OAuth flow opens in a popup or new tab — clean, no redirect mess  
-* Tokens land encrypted in the database the moment the handshake succeeds  
-* Refresh happens in the background — users never see it, never deal with it  
-* Rate limits are respected per platform, with proper back-off built in  
-* Disconnecting a platform archives the data — nothing gets wiped
+### Dashboard Overview (KPI-first)
+| Panel | Content |
+|---|---|
+| KPI Cards | Total reach, total followers, avg engagement rate, best-performing platform |
+| Growth Analytics | Multi-line chart, platform toggles, date-range picker |
+| Best Posting Times Heatmap | Hour × day-of-week grid; colour intensity = engagement |
+| Engagement Trends | Rolling 7-, 30-, 90-day rates with anomaly callouts |
+| Top Performing Content | Cards ranked by engagement rate — thumbnail, platform badge, AI score |
+| AI Recommendations | Actionable output: when to post, which format, which hashtags |
+| Competitor Benchmarking *(Pro)* | Metrics set against real industry averages |
+| Settings | Platform connections, notifications, billing, team roster |
 
-**Supported Platforms**
-
-Each platform connects via OAuth 2.0 and exposes different data through its respective API:
-
-* **YouTube** (Data API v3) — views, watch time, subscribers, CTR  
-* **Instagram** (Graph API) — reach, impressions, saves, follower growth  
-* **TikTok** (Research API) — views, shares, completion rate, followers  
-* **LinkedIn** (Marketing API) — impressions, clicks, follower demographics  
-* **X/Twitter** (API v2) — impressions, retweets, link clicks, follower delta
-
-**Token Validation**
-
-OAuth token responses get validated before anything hits the database — malformed or incomplete responses are rejected at the boundary. Token expiry and revocation cut off platform data access immediately, and error messages are specific by design: `INSTAGRAM_TOKEN_EXPIRED` with a reconnect prompt, not a bare 401\.
+### Responsive & accessible
+- Functional on mobile, tablet, and desktop without degradation
+- Full ARIA labelling, semantic HTML, keyboard navigation
+- Panels load lazily to keep initial render fast
 
 ---
 
-**Backend Requirements**
+## Platform Connection System
 
-Implement RESTful API, versioned at `/api/v1/`, built on Node.js \+ Express or Next.js API Routes.
+**OAuth flow:**
+- Opens in a popup or new tab; no messy redirects
+- Tokens are encrypted (AES-256) and persisted immediately on handshake success
+- Token refresh runs in the background — users never interact with it
+- Per-platform rate limits are respected with proper back-off
+- Disconnecting a platform **archives** data — nothing is deleted
+
+**Supported platforms and their data:**
+
+| Platform | API | Key Metrics |
+|---|---|---|
+| YouTube | Data API v3 | Views, watch time, subscribers, CTR |
+| Instagram | Graph API | Reach, impressions, saves, follower growth |
+| TikTok | Research API | Views, shares, completion rate, followers |
+| LinkedIn | Marketing API | Impressions, clicks, follower demographics |
+| X/Twitter | API v2 | Impressions, retweets, link clicks, follower delta |
+
+**Token validation:**
+- Malformed or incomplete OAuth responses are rejected at the boundary
+- Expiry and revocation cut off data access immediately
+- Errors are specific: `INSTAGRAM_TOKEN_EXPIRED` with a reconnect prompt — never a bare `401`
+
+---
+
+## Backend
+
+**Framework:** Node.js + Express or Next.js API Routes, versioned at `/api/v1/`
+
+**Endpoints:**
 
 ```
 Auth         POST   /auth/register | /auth/login | /auth/refresh
-Platforms    GET/POST/DELETE   /platforms | /platforms/connect/:platform
+Platforms    GET | POST | DELETE   /platforms | /platforms/connect/:platform
 Analytics    GET   /analytics/overview | /growth | /engagement | /best-times | /top-content
 AI           GET   /recommendations | /forecast/:platform
-Reports      GET   /reports/export?format=json|csv|pdf  |  POST /reports/schedule
-Workspaces   GET/POST/DELETE   /workspace | /workspace/invite | /workspace/member/:id
-Billing      GET/POST   /billing/plans | /billing/subscribe | /billing/cancel 
-
+Reports      GET   /reports/export?format=json|csv|pdf
+             POST  /reports/schedule
+Workspaces   GET | POST | DELETE   /workspace | /workspace/invite | /workspace/member/:id
+Billing      GET | POST   /billing/plans | /billing/subscribe | /billing/cancel
 ```
 
-A background sync worker runs on a schedule and handles the critical stuff:
+**Background sync worker (scheduled):**
+- Platform data synced every 6 hours, incremental only
+- ML models retrained weekly on new data
+- Weekly digest reports generated and emailed automatically
+- Expired OAuth tokens purged proactively
 
-* Platform syncs every 6 hours, incremental only  
-* ML models retrain weekly on whatever new data came in  
-* Weekly digest reports get generated and sent automatically  
-* Expired OAuth tokens get cleaned out before they cause issues
+**Automated emails (Nodemailer + SendGrid or Resend; credentials in env vars only):**
+- Account registration and email verification
+- Platform connected / disconnected
+- Weekly performance digest
+- Subscription changes: new, upgraded, cancelled
+- Team invitations
 
-Automated emails cover:
+---
 
-* New account registration and verification  
-* Platform connected or disconnected  
-* Weekly performance digest  
-* Subscription changes — new, upgraded, cancelled  
-* Team invites
-
-Use Nodemailer with SMTP or SendGrid / Resend. Credentials live in environment variables — nowhere else.
-
-**Billing — Stripe, three tiers:**
+## Billing (Stripe)
 
 | Tier | Platforms | Workspaces | Members | AI |
-| ----- | ----- | ----- | ----- | ----- |
+|---|---|---|---|---|
 | Free | 2 | 1 | 1 | Basic |
 | Pro | 5 | 3 | 5 | Full |
-| Agency | 5 | Unlimited | Unlimited | Full \+ white-label |
+| Agency | 5 | Unlimited | Unlimited | Full + white-label |
 
-Stripe webhooks handle the full subscription lifecycle — don't poll, listen. Premium features are gated at the middleware level — no client-side trust.
-
-**Security Integrations:**
-
-* JWT auth with access and refresh token rotation. Tokens expire. Refresh tokens rotate  
-* OAuth tokens encrypted at rest with AES-256. No plaintext tokens anywhere  
-* Rate limiting on every endpoint via `express-rate-limit`  
-* CORS locked to known origins. HTTPS enforced. No negotiation on either
+- Use Stripe webhooks for the full subscription lifecycle — no polling
+- Premium features are gated at the middleware level — no client-side trust
 
 ---
 
-**Data Processing**
+## Security
 
-Every platform's data gets normalised into one schema the frontend can rely on:
+- JWT auth with access and refresh token rotation; both expire on schedule
+- OAuth tokens encrypted at rest with AES-256; no plaintext tokens anywhere
+- Rate limiting on every endpoint via `express-rate-limit`
+- CORS locked to known origins; HTTPS enforced without negotiation
+- All inputs sanitised against XSS and injection before touching the database
+
+---
+
+## Data Processing
+
+**Normalised post schema:**
 
 ```
-post_id | platform | content_type | published_at | caption |
-hashtags | views | likes | comments | shares | saves |
-reach | impressions | engagement_rate | followers_at_post_time
+post_id | platform | content_type | published_at | caption | hashtags |
+views | likes | comments | shares | saves | reach | impressions |
+engagement_rate | followers_at_post_time
 ```
 
-Incoming data gets cleaned properly — deleted posts handled, missing metrics caught, pagination gaps filled. Missing values get imputed using median values per content type per platform — not global averages.
+**Data quality rules:**
+- Deleted posts are handled; missing metrics are caught; pagination gaps are filled
+- Missing values imputed using median per content type per platform — not global averages
 
-Features engineered before anything hits the models:
-
-* `engagement_rate = (likes + comments + shares) / reach`  
-* Hour, day-of-week, week-of-year extracted from `published_at`  
-* Rolling 7-day and 30-day engagement averages per platform  
-* Content type as one-hot encoded columns  
-* Caption sentiment score from an NLP pass  
-* Hashtag diversity index and average hashtag reach  
-* Follower growth velocity and its rate of change
-
-**Storage:**
-
-* PostgreSQL — time-series optimised, indexed on `platform`, `published_at`, `workspace_id`, `user_id`  
-* Full table set: `users`, `workspaces`, `workspace_members`, `platform_connections`, `posts`, `daily_metrics`, `follower_snapshots`, `recommendations`, `reports`, `subscriptions`, `audit_logs`  
-* Redis — dashboard overview cached at 5-minute TTL, posting-time calculations at 24-hour TTL, rate limit counters per platform per user  
-* S3 or Cloudflare R2 — exported reports and media thumbnails
-
-**ML Models:**
-
-* XGBoost or LightGBM predicts above-median engagement within 48 hours. Logistic Regression as baseline. Evaluated on ROC-AUC, precision, recall, F1. Output: 0–100% confidence score per content card  
-* Prophet or ARIMA forecasts follower growth 30 days out per platform, with confidence bands. Evaluated on MAE and MAPE  
-* Historical engagement aggregated by `hour × day-of-week`, normalised by follower count at posting time. Top 3 windows surfaced per platform per week  
-* Top 20% of posts by engagement analysed for patterns, fed into a GPT-4o or Claude prompt. Output: natural language recommendations, refreshed weekly
-
-All inputs sanitised against XSS and injection before touching the database. Every API response is structured JSON — success or error, always consistent.
+**Engineered features (pre-model):**
+- `engagement_rate = (likes + comments + shares) / reach`
+- Hour, day-of-week, week-of-year extracted from `published_at`
+- Rolling 7-day and 30-day engagement averages per platform
+- Content type one-hot encoded
+- Caption sentiment score from NLP
+- Hashtag diversity index and average hashtag reach
+- Follower growth velocity and its rate of change
 
 ---
 
-**Output Requirements**
+## Storage
 
-* Animated, responsive dashboard that feels like a premium product  
-* Cross-platform analytics in one view, with metrics that make sense together  
-* AI predictions on content performance with honest confidence scores attached  
-* Heatmaps that actually tell you when to post, not just show colour  
-* Content ranked by engagement rate, not raw likes  
-* Weekly AI recommendations in plain English, automatically refreshed  
-* Reports in JSON, CSV, or PDF — ready to send to a client without extra work  
-* Weekly digest email that arrives without the user doing anything  
-* Billing that works, upgrades that are frictionless, plans that make sense  
-* Confirmation on every action. Clear errors when something breaks. No silent failures
+| Layer | Purpose | Details |
+|---|---|---|
+| PostgreSQL | Primary data store | Time-series optimised; indexed on `platform`, `published_at`, `workspace_id`, `user_id` |
+| Redis | Caching & rate limiting | Overview cache: 5-min TTL; posting-time cache: 24-hr TTL; rate-limit counters per platform per user |
+| S3 / Cloudflare R2 | File storage | Exported reports and media thumbnails |
+
+**Full table set:** `users`, `workspaces`, `workspace_members`, `platform_connections`, `posts`, `daily_metrics`, `follower_snapshots`, `recommendations`, `reports`, `subscriptions`, `audit_logs`
 
 ---
 
-**Error Handling and Documentation**
+## ML Models
 
-* Catch form errors on the frontend before they become API errors  
-* Handle backend validation errors and platform API problems without crashing  
-* Provide structured errors in this shape:
+**Engagement classifier (XGBoost or LightGBM):**
+- Predicts above-median engagement within 48 hours
+- Logistic Regression as baseline for comparison
+- Evaluated on ROC-AUC, precision, recall, F1
+- Output: 0–100% confidence score per content card
 
-json
+**Follower growth forecaster (Prophet or ARIMA):**
+- 30-day forecast per platform with confidence bands
+- Evaluated on MAE and MAPE
+
+**Best posting times:**
+- Historical engagement aggregated by hour × day-of-week, normalised by follower count at post time
+- Top 3 posting windows surfaced per platform per week
+
+**AI recommendations:**
+- Top 20% of posts by engagement rate analysed for patterns
+- Fed into a GPT-4o or Claude prompt; output is plain-English recommendations
+- Refreshed weekly automatically
+
+**All API responses follow a consistent JSON structure — for both success and error states.**
+
+---
+
+## Error Handling
+
+**Frontend:** Catch and display form validation errors before they reach the API.
+
+**Backend:** Handle validation errors and platform API failures without crashing. Every error response follows this shape:
 
 ```json
 {
@@ -215,63 +216,45 @@ json
 }
 ```
 
-* Winston or Pino logs every backend failure with a full stack trace
+**Logging:** Winston or Pino logs every backend failure with a full stack trace.
 
-Developer documentation covers:
-
-* Folder structure walkthrough  
-* Local setup instructions  
-* `.env.example` with every variable explained  
-* Database migration and seed steps  
-* Deployment guide for Vercel, Railway, or Docker  
-* API reference with actual request and response examples — not just endpoint names
+**User feedback:** Every action produces a confirmation. Every failure produces a clear, specific error message. Silent failures are not acceptable.
 
 ---
 
-**Performance and Scalability**
+## Performance & Scalability
 
-* Dynamic imports and route-level code splitting keep the bundle lean  
-* Every dashboard panel and heavy chart component loads lazily  
-* Cursor-based pagination on all list endpoints — offset pagination falls apart at scale  
-* Ingestion pipeline designed to handle 10,000+ accounts without degrading  
-* BullMQ queues handle all async work — syncs, exports, report generation  
-* Stateless JWT keeps horizontal API scaling simple  
-* ML models use fixed random seeds and versioned artifacts — results stay reproducible  
-* User interactions are debounced so rapid input doesn't hammer the API  
-* Accessibility and SEO treated as first-class requirements, not an afterthought
+- Dynamic imports and route-level code splitting keep the bundle lean
+- Dashboard panels and heavy chart components load lazily
+- Cursor-based pagination on all list endpoints (offset pagination does not scale)
+- Ingestion pipeline designed for 10,000+ accounts without degradation
+- BullMQ queues handle all async work: syncs, exports, report generation
+- Stateless JWT enables horizontal API scaling
+- ML models use fixed random seeds and versioned artifacts for reproducibility
+- User input debounced to prevent API hammering
+- Accessibility and SEO are treated as first-class requirements
 
 ---
 
-**Technology Stack**
-Use the following:
+## Developer Documentation
 
-Frontend:
+Deliver documentation covering:
 
-* Next.js 14 (App Router) / React  
-* Framer Motion  
-* Tailwind CSS \+ shadcn/ui  
-* Zustand or TanStack Query  
-* Recharts or Nivo
+1. Folder structure walkthrough
+2. Local setup instructions
+3. `.env.example` with every variable explained
+4. Database migration and seed steps
+5. Deployment guide for Vercel, Railway, or Docker
+6. API reference with real request/response examples — not just endpoint names
 
-Backend:
+---
 
-* Node.js \+ Express or Next.js API Routes  
-* Nodemailer \+ SendGrid or Resend  
-* Stripe  
-* BullMQ \+ Redis  
-* Winston or Pino  
-* dotenv  
-* JWT \+ bcrypt
+## Technology Stack
 
-Data and Storage:
+**Frontend:** Next.js 14 (App Router), React, Framer Motion, Tailwind CSS + shadcn/ui, Zustand or TanStack Query, Recharts or Nivo
 
-* PostgreSQL  
-* Redis  
-* Prisma  
-* AWS S3 or Cloudflare R2
+**Backend:** Node.js + Express or Next.js API Routes, Nodemailer + SendGrid or Resend, Stripe, BullMQ + Redis, Winston or Pino, dotenv, JWT + bcrypt
 
-AI and ML:
+**Data & Storage:** PostgreSQL, Redis, Prisma ORM, AWS S3 or Cloudflare R2
 
-* Python microservice — scikit-learn, XGBoost, LightGBM, Prophet  
-* OpenAI API
-
+**AI & ML:** Python microservice — scikit-learn, XGBoost, LightGBM, Prophet; OpenAI API (GPT-4o)

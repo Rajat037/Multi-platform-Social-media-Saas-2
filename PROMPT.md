@@ -28,7 +28,7 @@ Every interaction should feel considered. Framer Motion handles the heavy liftin
 * Charts animate in on load. Metric cards stagger their appearance. Skeleton loaders cover the gap while data arrives  
 * When data refreshes, it updates inline — no full reloads, no flicker
 
-Navigation between these pages should feel continuous, not jarring:
+Include smooth transitions between:
 
 * Landing / Auth Page  
 * Onboarding Flow (platform connections)  
@@ -47,7 +47,7 @@ Animations follow three rules:
 
 **Layout Requirements**
 
-Every panel on this dashboard needs to justify its existence:
+The dashboard must include:
 
 * Header carrying a workspace switcher, notification bell, and avatar dropdown  
 * Sidebar that collapses cleanly without eating screen real estate  
@@ -60,11 +60,10 @@ Every panel on this dashboard needs to justify its existence:
 * Competitor Benchmarking Panel (Pro tier) — real context against industry averages, not just internal numbers  
 * Settings Page — platform connections, notification toggles, billing details, team roster
 
-Non-negotiables:
-
-* Works on mobile, tablet, and desktop without compromise  
-* Fully accessible — ARIA labels, semantic markup, keyboard navigation throughout  
-* Panels load lazily so the initial render stays fast
+The layout must:
+* Working on mobile, tablet, and desktop without compromise  
+* Fully access — ARIA labels, semantic markup, keyboard navigation throughout  
+* Load panels lazily so the initial render stays fast
 
 ---
 
@@ -96,7 +95,7 @@ OAuth token responses get validated before anything hits the database — malfor
 
 **Backend Requirements**
 
-RESTful API, versioned at `/api/v1/`, built on Node.js \+ Express or Next.js API Routes.
+Implement RESTful API, versioned at `/api/v1/`, built on Node.js \+ Express or Next.js API Routes.
 
 ```
 Auth         POST   /auth/register | /auth/login | /auth/refresh
@@ -105,7 +104,8 @@ Analytics    GET   /analytics/overview | /growth | /engagement | /best-times | /
 AI           GET   /recommendations | /forecast/:platform
 Reports      GET   /reports/export?format=json|csv|pdf  |  POST /reports/schedule
 Workspaces   GET/POST/DELETE   /workspace | /workspace/invite | /workspace/member/:id
-Billing      GET/POST   /billing/plans | /billing/subscribe | /billing/cancel
+Billing      GET/POST   /billing/plans | /billing/subscribe | /billing/cancel 
+
 ```
 
 A background sync worker runs on a schedule and handles the critical stuff:
@@ -135,7 +135,7 @@ Use Nodemailer with SMTP or SendGrid / Resend. Credentials live in environment v
 
 Stripe webhooks handle the full subscription lifecycle — don't poll, listen. Premium features are gated at the middleware level — no client-side trust.
 
-**Security non-negotiables:**
+**Security Integrations:**
 
 * JWT auth with access and refresh token rotation. Tokens expire. Refresh tokens rotate  
 * OAuth tokens encrypted at rest with AES-256. No plaintext tokens anywhere  
@@ -202,8 +202,8 @@ All inputs sanitised against XSS and injection before touching the database. Eve
 **Error Handling and Documentation**
 
 * Catch form errors on the frontend before they become API errors  
-* Handle backend validation failures and platform API problems without crashing  
-* Every error returns in this shape:
+* Handle backend validation errors and platform API problems without crashing  
+* Provide structured errors in this shape:
 
 json
 
@@ -243,6 +243,7 @@ Developer documentation covers:
 ---
 
 **Technology Stack**
+Use the following:
 
 Frontend:
 
@@ -272,10 +273,5 @@ Data and Storage:
 AI and ML:
 
 * Python microservice — scikit-learn, XGBoost, LightGBM, Prophet  
-* OpenAI GPT-4o or Anthropic Claude API
-
-Optional:
-
-* Docker  
-* Vercel \+ Railway or Render
+* OpenAI API
 
